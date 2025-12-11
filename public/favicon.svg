@@ -1,17 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <!-- Blue circular background with pin shape -->
   <defs>
-    <clipPath id="pinClip">
-      <path d="M 100 20 C 70 20 50 40 50 70 C 50 110 100 180 100 180 C 100 180 150 110 150 70 C 150 40 130 20 100 20 Z"/>
-    </clipPath>
+    <style>
+      .pin-bg { fill: #4BA9D6; }
+      .bolt { fill: #FFA500; }
+    </style>
   </defs>
   
   <!-- Pin shape background -->
-  <path d="M 100 20 C 70 20 50 40 50 70 C 50 110 100 180 100 180 C 100 180 150 110 150 70 C 150 40 130 20 100 20 Z" fill="#4BA9D6"/>
-  
-  <!-- Circle inside pin -->
-  <circle cx="100" cy="65" r="45" fill="#4BA9D6" stroke="none"/>
+  <path class="pin-bg" d="M 100 20 C 70 20 50 40 50 70 C 50 110 100 180 100 180 C 100 180 150 110 150 70 C 150 40 130 20 100 20 Z"/>
   
   <!-- Lightning bolt -->
-  <path d="M 95 40 L 110 65 L 95 65 L 110 95 L 75 65 L 90 65 Z" fill="#FFA500" stroke="#FFB84D" stroke-width="1"/>
+  <path class="bolt" d="M 95 45 L 108 70 L 95 70 L 110 100 L 75 70 L 90 70 Z"/>
 </svg>

@@ -122,6 +122,7 @@ const ItineraryView = ({ tripData }: ItineraryViewProps) => {
   };
 
   const [itinerary, setItinerary] = useState<PlannerDay[]>(generateItinerary());
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     setItinerary(generateItinerary());
@@ -134,6 +135,46 @@ const ItineraryView = ({ tripData }: ItineraryViewProps) => {
     tripData.style,
     tripData.travelType,
   ]);
+
+  // Generate AI itinerary from backend
+  const generateAIItinerary = async () => {
+    setIsGenerating(true);
+    try {
+      // Calculate number of days from dates
+      const days = tripData.dates.start && tripData.dates.end
+        ? Math.ceil((tripData.dates.end.getTime() - tripData.dates.start.getTime()) / (1000 * 60 * 60 * 24)) + 1
+        : 2;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/itineraries/generate`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            destination: tripData.destination,
+            days: days,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to generate itinerary");
+      }
+
+      const data = await response.json();
+      console.log("Generated itinerary:", data);
+      // Parse the AI-generated text and create a new itinerary structure if needed
+      // For now, log the result and keep the current itinerary
+      alert("AI-generated itinerary:\n\n" + data.itinerary);
+    } catch (error) {
+      console.error("Error generating AI itinerary:", error);
+      alert("Could not generate AI itinerary. Make sure your Hugging Face API token is set in the backend.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const periodIcons = {
     morning: Sun,
@@ -288,9 +329,14 @@ const ItineraryView = ({ tripData }: ItineraryViewProps) => {
           <Share2 className="h-5 w-5" />
           Share Itinerary
         </Button>
-        <Button variant="glass" size="lg">
-          <RefreshCw className="h-5 w-5" />
-          Regenerate
+        <Button 
+          variant="glass" 
+          size="lg"
+          onClick={generateAIItinerary}
+          disabled={isGenerating}
+        >
+          <RefreshCw className={`h-5 w-5 ${isGenerating ? "animate-spin" : ""}`} />
+          {isGenerating ? "Generating..." : "AI Regenerate"}
         </Button>
       </motion.div>
 

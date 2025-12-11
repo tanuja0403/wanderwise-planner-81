@@ -6,11 +6,13 @@ const {
   getOne,
   update,
   remove,
+  generateItinerary,
 } = require("../controllers/itineraryController");
 
 router.use(clerkAuth);
 router.get("/", list);
 router.post("/", create);
+router.post("/generate", generateItinerary);
 router.get("/:id", getOne);
 router.put("/:id", update);
 router.delete("/:id", remove);
